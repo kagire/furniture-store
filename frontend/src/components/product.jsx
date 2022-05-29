@@ -12,13 +12,11 @@ class Product extends React.Component{
         phone: '',
         isLoaded : false,
         product: [],
+        popularity: '',
         products: []
     }
 
     async componentDidMount(){
-
-        const slides = document.getElementsByClassName("mySlides");
-        console.log(slides);
         await fetch('/products/' + window.location.pathname.substring(9))
         .then((res) => res.json())
         .then((json) => {
@@ -26,11 +24,18 @@ class Product extends React.Component{
                 product: json
             })
         })
-        await fetch('/products')
+        await fetch('/products/popular')
         .then((res) => res.json())
         .then((json) => {
           this.setState({
-              products: json,
+              products: json
+          })
+        })
+        await fetch('/products/' + this.state.product.product.id + '/popularity')
+        .then((res) => res.json())
+        .then((json) => {
+          this.setState({
+              popularity: json,
               isLoaded: true
           })
         })
@@ -106,7 +111,7 @@ class Product extends React.Component{
                 {/* NAVBAR */}
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark static-top">
                 <div className="container">
-                <a className="navbar-brand" href="index.html"><img src={HeaderLogo} alt=""/></a>
+                <Link className="navbar-brand"  to="/"><img height={26} src={HeaderLogo} alt=""/></Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -137,7 +142,7 @@ class Product extends React.Component{
                         <div className="col-md-12">
                             <div className="section-heading">
                             <div className="line-dec"></div>
-                            <h1>Single Product</h1>
+                            <h1>{this.state.product.product.name}</h1>
                             </div>
                         </div>
                         <div className="col-md-6">
@@ -152,10 +157,10 @@ class Product extends React.Component{
                             <h4>{this.state.product.product.name}</h4>
                             <h6>{this.state.product.product.price + "$"}</h6>
                             <p>{this.state.product.product.info}</p>
-                            <span>Popular!</span>
+                            <span>{this.state.popularity} ordered</span>
                             <form onSubmit={(event) => this.handleSubmit(event)}>
                                 <label htmlFor="phone">Phone:</label>
-                                <input name="phone" type="text" className="quantity-text" value={this.state.phone} onChange={(event) => this.handleChange(event)} id="phone" />
+                                <input name="phone" required type="text" className="quantity-text" value={this.state.phone} onChange={(event) => this.handleChange(event)} id="phone" />
                                 <input type="submit" className="button" value="Order" />
                             </form>
                             <div id="successPlace" />

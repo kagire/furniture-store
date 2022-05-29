@@ -17,11 +17,14 @@ public class TransactionService {
     @Autowired
     ProductRepository productRepository;
 
+    JournalLogger journalLogger = new JournalLogger();
+
     @Transactional
     public void saveProduct(Product newProduct, MultipartFile[] multipartFiles, String attributes){
 
         Product product = productRepository.save(newProduct);
         ImageService.saveImages(multipartFiles, product.getId(), product.getName());
         productAttributeRepository.saveAll(StringParser.parseProductAttributes(newProduct.getId(), attributes));
+        journalLogger.logProductAdd(product);
     }
 }

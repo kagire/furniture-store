@@ -33,9 +33,24 @@ public class ProductController {
         return new ResponseEntity<>(productImageList, HttpStatus.OK);
     }
 
+    @GetMapping("popular")
+    public ResponseEntity<List<ProductImage>> getPopularProducts() {
+
+        List<ProductImage> productImageList = new ArrayList<>();
+        for(Product product : productRepository.findPopularProducts()){
+            productImageList.add(ProductImage.getImagesToProduct(product, productAttributeRepository.findAllByProductId(product.getId())));
+        }
+        return new ResponseEntity<>(productImageList, HttpStatus.OK);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<ProductImage> getProduct(@PathVariable int id){
         return new ResponseEntity<>(ProductImage.getImagesToProduct(productRepository.findById(id).get(),
                 productAttributeRepository.findAllByProductId(id)), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/popularity")
+    public ResponseEntity<String> getProductPopularity(@PathVariable int id){
+        return new ResponseEntity<>(String.valueOf(productRepository.getProductPopularity(id)), HttpStatus.OK);
     }
 }
