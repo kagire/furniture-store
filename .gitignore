@@ -24,3 +24,4 @@
 /target/
 /frontend/node_modules/
 /src/main/resources/report.xlsx
+/src/main/resources/images/*

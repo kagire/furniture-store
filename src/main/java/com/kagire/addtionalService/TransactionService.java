@@ -17,7 +17,8 @@ public class TransactionService {
     @Autowired
     ProductRepository productRepository;
 
-    JournalLogger journalLogger = new JournalLogger();
+    @Autowired
+    JournalLogger journalLogger;
 
     @Transactional
     public void saveProduct(Product newProduct, MultipartFile[] multipartFiles, String attributes){

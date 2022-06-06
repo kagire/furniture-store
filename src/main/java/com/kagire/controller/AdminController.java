@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
-@CrossOrigin
 @Controller
 @RequestMapping("admin")
 public class AdminController {
